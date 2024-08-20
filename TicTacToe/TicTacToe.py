@@ -65,23 +65,13 @@ class TicTacToe:
 
     @property
     def output_count(self):
-        return 9
+        return self.board_size * self.board_size
 
-    # noinspection PyMethodMayBeStatic
-    def max_episode_timesteps(self):
-        return 1000
-
-    # noinspection PyMethodMayBeStatic
-    def states(self):
-        # Define the state space (6-dimensional for the bit pattern encoding)
-        return dict(type='float', shape=(self.input_count,))
-
-    # noinspection PyMethodMayBeStatic
-    def actions(self):
-        # Define the action space (9 discrete actions, one for each cell)
-        return dict(type='int', num_values=self.output_count)
-
-    def step(self, player, action):
+    def step(self, action, player=None):
+        if player is None:
+            player = self.current_player
+        if action is not tuple:
+            action = divmod(action, self.board_size)
         x, y = action
         # Check if the action is valid (the cell is empty
         # and the game is not finished)
@@ -97,11 +87,6 @@ class TicTacToe:
             reward = -10
 
         return self.encoded_board(-player), self.done, reward
-
-    def execute(self, actions):
-        # Translate action into board coordinates
-        action = divmod(actions, self.board_size)
-        return self.step(self.current_player, action)
 
     def _check_winner(self):
         # Iterate over both players (1 for 'X', -1 for 'O')
@@ -171,3 +156,32 @@ class SimpleTicTacToe(TicTacToe):
     @property
     def max_input_value(self):
         return 1
+
+
+def print_board_history(boards: [[[int]]]) -> None:
+    text = ""
+    for row in range(len(boards[0][0])):
+        for board in boards:
+            for column in board[row]:
+                piece = "X" if column == 1 else "O" if column == -1 else "."
+                text += piece
+            text += " "
+        text += "\n"
+    print(text)
+
+
+def evaluate(env, action_fn, num_games=100):
+    print("starting evaluation")
+    wins = {1: 0, -1: 0, 0: 0, None: 0}
+    for _ in range(num_games):
+        obs = env.reset()[0]
+        history = []
+        while not env.ticTacToe.done:
+            action = action_fn(obs)
+            obs = env.step(action)[0]
+            history.append(env.ticTacToe.board.copy())
+            if env.ticTacToe.done:
+                print("winner", env.ticTacToe.winner)
+                print_board_history(history)
+                wins[env.ticTacToe.winner] += 1
+    print("Wins:", wins)
