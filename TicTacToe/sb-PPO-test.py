@@ -1,9 +1,9 @@
 from stable_baselines3 import PPO
-from SBTicTacToeEnv import SBTicTacToeEnv
+from environments.SBTicTacToeEnv import SBTicTacToeEnv
 from TicTacToe import evaluate
-from TicTacToe import SimpleTicTacToe as TicTacToe
+from environments.DefaultGameEnvironment import SimpleTicTacToe
 
 # Load the trained model
-env = SBTicTacToeEnv(TicTacToe())
+env = SBTicTacToeEnv(SimpleTicTacToe(), 1)
 sb_model = PPO.load("ppo_tictactoe")
 evaluate(env, lambda obs: sb_model.predict(obs)[0])

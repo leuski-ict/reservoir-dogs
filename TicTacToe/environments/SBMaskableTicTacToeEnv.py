@@ -1,6 +1,8 @@
 from sb3_contrib.common.envs import InvalidActionEnvDiscrete
-from SBTicTacToeEnv import SBTicTacToeEnv
-from TicTacToe import *
+
+from environments.SBTicTacToeEnv import SBTicTacToeEnv
+from agents.Agent import TicTacToeAgent
+from environments.GameEnvironment import TicTacToeEnv
 
 
 class SBMaskableTicTacToeEnv(SBTicTacToeEnv, InvalidActionEnvDiscrete):

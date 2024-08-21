@@ -1,9 +1,9 @@
 from sb3_contrib import MaskablePPO
-from SBMaskableTicTacToeEnv import SBMaskableTicTacToeEnv
+
 from TicTacToe import *
-from SBTicTacToeEnv import *
-from TicTacToe import SimpleTicTacToe as TicTacToe
-from sb3_contrib.common.maskable.utils import get_action_masks
+from agents.MinimaxAgent import TicTacToeMinimaxAgent
+from agents.StableBaselinesMaskableAgent import SBTicTacToeMaskableAgent
+from environments.MemristorGameEnvironment import TicTacToeFloatBits
 
 # env = SBMaskableTicTacToeEnv(TicTacToe())
 # # Load the trained model
@@ -11,11 +11,24 @@ from sb3_contrib.common.maskable.utils import get_action_masks
 # evaluate(env, lambda obs: sb_model.predict(
 #     obs, action_masks=get_action_masks(env))[0])
 
+# tournament(
+#     # TicTacToeRandomAgent(),
+#     SBTicTacToeMaskableAgent(MaskablePPO.load("../maskable_x_ppo_tictactoe_f2"),
+#                              TicTacToeFloatBits),
+#     # TicTacToeRandomAgent()
+#     # SBTicTacToeMaskableAgent(MaskablePPO.load("maskable_o_ppo_tictactoe_f2"),
+#     #                          TicTacToeFloatBits),
+#     # TicTacToeMinimaxAgent(),
+#     TicTacToeMinimaxAgent(),
+# )
+
 tournament(
     # TicTacToeRandomAgent(),
-    SBTicTacToeMaskableAgent(MaskablePPO.load("maskable_x_ppo_tictactoe_f"),
+    SBTicTacToeMaskableAgent(MaskablePPO.load("../maskable_x_ppo_tictactoe_f3"),
                              TicTacToeFloatBits),
     # TicTacToeRandomAgent()
-    SBTicTacToeMaskableAgent(MaskablePPO.load("maskable_o_ppo_tictactoe_f"),
-                             TicTacToeFloatBits),
+    TicTacToeMinimaxAgent(),
+    # SBTicTacToeMaskableAgent(MaskablePPO.load("../maskable_o_ppo_tictactoe_f3"),
+    #                          TicTacToeFloatBits),
+    # TicTacToeMinimaxAgent(),
 )
