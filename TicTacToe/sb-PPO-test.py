@@ -5,5 +5,5 @@ from TicTacToe import SimpleTicTacToe as TicTacToe
 
 # Load the trained model
 env = SBTicTacToeEnv(TicTacToe())
-sb_model = PPO.load("ppo_tictactoe", env=env)
+sb_model = PPO.load("ppo_tictactoe")
 evaluate(env, lambda obs: sb_model.predict(obs)[0])
