@@ -1,5 +1,5 @@
-from Game import TicTacToeGame
-from environments.GameEnvironment import TicTacToeEnv
+from Game import Game
+from environments.GameEnvironment import GameEnvironment
 import numpy as np
 
 # Assume this table converts 4-bit sequences to float values
@@ -23,8 +23,8 @@ CONDUCTANCE_TABLE = {
 }
 
 
-class TicTacToeFloatBits(TicTacToeEnv):
-    def __init__(self, game: TicTacToeGame = TicTacToeGame(),
+class MeanReservoirGameEnvironment(GameEnvironment):
+    def __init__(self, game: Game = Game(),
                  sample: bool = False):
         super().__init__(game)
         self.sample = sample
@@ -64,6 +64,6 @@ class TicTacToeFloatBits(TicTacToeEnv):
         return np.array(encoded_board, dtype=np.float32)
 
 
-class TicTacToeFloat(TicTacToeFloatBits):
-    def __init__(self, game: TicTacToeGame = TicTacToeGame()):
+class SampledReservoirGameEnvironment(MeanReservoirGameEnvironment):
+    def __init__(self, game: Game = Game()):
         super().__init__(game, True)

@@ -1,15 +1,15 @@
-from Game import TicTacToeGame
-from agents.Agent import TicTacToeAgent
+from Game import Game
+from agents.Agent import AbstractAgent
 
 
-class SBTicTacToeAgent(TicTacToeAgent):
+class StableBaselineAgent(AbstractAgent):
     def __init__(self, model, env_type):
         super().__init__()
         self.model = model
         self.tic_tac_toe = None
         self.env_type = env_type
 
-    def make_move(self, game: TicTacToeGame, player=None) -> None:
+    def make_move(self, game: Game, player=None) -> None:
         if game.done:
             return
         if self.tic_tac_toe is None or self.tic_tac_toe.game is not game:

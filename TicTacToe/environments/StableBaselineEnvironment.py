@@ -2,13 +2,13 @@ from gymnasium import spaces, Env
 import numpy as np
 import stable_baselines3.common.env_checker
 
-from agents.Agent import TicTacToeAgent
-from environments.GameEnvironment import TicTacToeEnv
+from agents.Agent import AbstractAgent
+from environments.GameEnvironment import GameEnvironment
 
 
-class SBTicTacToeEnv(Env):
-    def __init__(self, tic_tac_toe: TicTacToeEnv, player,
-                 opponent: TicTacToeAgent = None):
+class StableBaselineEnvironment(Env):
+    def __init__(self, tic_tac_toe: GameEnvironment, player,
+                 opponent: AbstractAgent = None):
         self.this_player = player
         self.tic_tac_toe = tic_tac_toe
         self.opponent = opponent

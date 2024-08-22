@@ -1,7 +1,7 @@
 from Board import Board
 
 
-class TicTacToeGame:
+class Game:
     def __init__(self, board_size=3):
         self.winner = None
         self.done = None

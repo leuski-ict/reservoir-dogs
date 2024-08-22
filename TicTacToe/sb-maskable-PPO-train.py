@@ -2,12 +2,13 @@ import torch.nn as nn
 from stable_baselines3.common.torch_layers import BaseFeaturesExtractor
 from sb3_contrib import MaskablePPO
 
-from agents.StableBaselinesMaskableAgent import SBTicTacToeMaskableAgent
-from environments.SBTicTacToeEnv import *
-from environments.SBMaskableTicTacToeEnv import SBMaskableTicTacToeEnv
-from agents.MinimaxAgent import TicTacToeMinimaxAgent
-from agents.RandomAgent import TicTacToeRandomAgent
-from environments.MemristorGameEnvironment import TicTacToeFloatBits
+from agents.StableBaselinesMaskableAgent import StableBaselineMaskableAgent
+from environments.StableBaselineEnvironment import *
+from environments.MaskableStableBaselineEnvironment import \
+    MaskableStableBaselineEnvironment
+from agents.MinimaxAgent import MinimaxAgent
+from agents.RandomAgent import RandomAgent
+from environments.ReservoirGameEnvironment import MeanReservoirGameEnvironment
 import os
 from stable_baselines3.common.monitor import Monitor
 
@@ -42,19 +43,20 @@ policy_kwargs = dict(
 def opponent(player, suffix):
     try:
         model = MaskablePPO.load(
-            SBTicTacToeMaskableAgent.file_name(player, suffix))
-        return SBTicTacToeMaskableAgent(model, TicTacToeFloatBits)
+            StableBaselineMaskableAgent.file_name(player, suffix))
+        return StableBaselineMaskableAgent(model, MeanReservoirGameEnvironment)
     except ValueError:
-        return TicTacToeRandomAgent()
+        return RandomAgent()
 
 
 def get_model(player, suffix):
-    our_env = SBMaskableTicTacToeEnv(TicTacToeFloatBits(), player)
+    our_env = MaskableStableBaselineEnvironment(
+        MeanReservoirGameEnvironment(), player)
     env = check_env(Monitor(our_env, log_dir))
     #    callback = EvalCallback(eval_freq=1000, log_path=log_dir)
     try:
         return MaskablePPO.load(
-            SBTicTacToeMaskableAgent.file_name(player, suffix),
+            StableBaselineMaskableAgent.file_name(player, suffix),
             env=env), our_env
     except FileNotFoundError:
         return MaskablePPO('MlpPolicy', env, policy_kwargs=policy_kwargs,
@@ -63,24 +65,26 @@ def get_model(player, suffix):
 
 def train(player, suffix):
     model, env = get_model(player, suffix)
-    env.opponent = TicTacToeMinimaxAgent()
+    env.opponent = MinimaxAgent()
     model.learn(total_timesteps=1000000)
-    model.save(SBTicTacToeMaskableAgent.file_name(player, suffix))
+    model.save(StableBaselineMaskableAgent.file_name(player, suffix))
 
 
 def train_multiple(suffix):
     model_x, env_x = get_model(1, suffix)
     model_o, env_o = get_model(-1, suffix)
-    env_x.opponent = SBTicTacToeMaskableAgent(model_o, TicTacToeFloatBits)
-    env_o.opponent = SBTicTacToeMaskableAgent(model_x, TicTacToeFloatBits)
+    env_x.opponent = StableBaselineMaskableAgent(
+        model_o, MeanReservoirGameEnvironment)
+    env_o.opponent = StableBaselineMaskableAgent(
+        model_x, MeanReservoirGameEnvironment)
     for iteration in range(10000):
         model_x.learn(total_timesteps=100)
         model_o.learn(total_timesteps=100)
         if iteration % 100 == 0:
-            model_x.save(SBTicTacToeMaskableAgent.file_name(1, suffix))
-            model_o.save(SBTicTacToeMaskableAgent.file_name(-1, suffix))
-    model_x.save(SBTicTacToeMaskableAgent.file_name(1, suffix))
-    model_o.save(SBTicTacToeMaskableAgent.file_name(-1, suffix))
+            model_x.save(StableBaselineMaskableAgent.file_name(1, suffix))
+            model_o.save(StableBaselineMaskableAgent.file_name(-1, suffix))
+    model_x.save(StableBaselineMaskableAgent.file_name(1, suffix))
+    model_o.save(StableBaselineMaskableAgent.file_name(-1, suffix))
 
 
 # train_multiple()

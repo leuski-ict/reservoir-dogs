@@ -1,14 +1,14 @@
 import random
 
-from Game import TicTacToeGame
-from agents.Agent import TicTacToeAgent
+from Game import Game
+from agents.Agent import AbstractAgent
 
 
-class TicTacToeRandomAgent(TicTacToeAgent):
+class RandomAgent(AbstractAgent):
     def __init__(self):
         super().__init__()
 
-    def make_move(self, game: TicTacToeGame, player=None) -> None:
+    def make_move(self, game: Game, player=None) -> None:
         if game.done:
             return
         action = random.choice(game.available_actions())

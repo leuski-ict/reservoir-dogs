@@ -28,7 +28,7 @@ def evaluate(env, action_fn, num_games=100):
 def tournament(x_agent, o_agent, num_games=100):
     print("starting tournament")
     wins = {1: 0, -1: 0, 0: 0, None: 0}
-    game = TicTacToeGame()
+    game = Game()
     for _ in range(num_games):
         game.reset()
         action = random.choice(game.available_actions())

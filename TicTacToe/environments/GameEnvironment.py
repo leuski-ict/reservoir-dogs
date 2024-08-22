@@ -1,8 +1,8 @@
-from Game import TicTacToeGame
+from Game import Game
 
 
-class TicTacToeEnv:
-    def __init__(self, game: TicTacToeGame = TicTacToeGame()):
+class GameEnvironment:
+    def __init__(self, game: Game = Game()):
         self.game = game
 
     def reset(self):

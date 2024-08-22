@@ -1,10 +1,10 @@
-from Game import TicTacToeGame
-from environments.GameEnvironment import TicTacToeEnv
+from Game import Game
+from environments.GameEnvironment import GameEnvironment
 import numpy as np
 
 
-class SimpleTicTacToe(TicTacToeEnv):
-    def __init__(self, game: TicTacToeGame = TicTacToeGame()):
+class DefaultGameEnvironment(GameEnvironment):
+    def __init__(self, game: Game = Game()):
         super().__init__(game)
 
     def encoded_board(self, current_player):
