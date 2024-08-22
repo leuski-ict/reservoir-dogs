@@ -21,6 +21,10 @@ CONDUCTANCE_TABLE = {
     (1, 1, 1, 0): (0.949045017, 0.015482592),
     (1, 1, 1, 1): (1.796519291, 0.013471359),
 }
+CONDUCTANCE_TABLE_MIN = min(
+    [value[0] for value in CONDUCTANCE_TABLE.values()]) * 0.93
+CONDUCTANCE_TABLE_MAX = max(
+    [value[0] for value in CONDUCTANCE_TABLE.values()]) * 1.05
 
 
 class MeanReservoirGameEnvironment(GameEnvironment):
@@ -35,11 +39,11 @@ class MeanReservoirGameEnvironment(GameEnvironment):
 
     @property
     def min_input_value(self):
-        return min(CONDUCTANCE_TABLE.values()) * 0.93
+        return CONDUCTANCE_TABLE_MIN
 
     @property
     def max_input_value(self):
-        return max(CONDUCTANCE_TABLE.values()) * 1.05
+        return CONDUCTANCE_TABLE_MAX
 
     def encoded_board(self, current_player):
         encoded_board = []
@@ -58,6 +62,8 @@ class MeanReservoirGameEnvironment(GameEnvironment):
                 if self.sample:
                     value = np.random.normal(
                         value_and_error[0], value_and_error[1])
+                    value = max(min(value, CONDUCTANCE_TABLE_MAX),
+                                CONDUCTANCE_TABLE_MIN)
                 else:
                     value = value_and_error[0]
                 encoded_board.append(value)

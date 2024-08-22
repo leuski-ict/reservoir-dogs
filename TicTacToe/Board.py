@@ -120,3 +120,12 @@ class Board:
     def __str__(self):
         return "\n".join([self.row_as_string(row_index)
                           for row_index in range(self.size)])
+
+
+class BoardList(list):
+    def __str__(self):
+        if len(self) == 0:
+            return "no boards"
+        return "\n".join([" ".join([board.row_as_string(row)
+                                    for board in self])
+                          for row in range(self[0].size)])
