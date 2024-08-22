@@ -28,10 +28,13 @@ CONDUCTANCE_TABLE_MAX = max(
 
 
 class MeanReservoirGameEnvironment(GameEnvironment):
+    name = "Mean"
+
     def __init__(self, game: Game = Game(),
-                 sample: bool = False):
+                 sample: bool = False, parity: bool = True):
         super().__init__(game)
         self.sample = sample
+        self.parity = parity
 
     @property
     def input_count(self):
@@ -57,7 +60,10 @@ class MeanReservoirGameEnvironment(GameEnvironment):
                         count += 1
                     else:
                         position_bits.append(0)
-                position_bits.append(count % 2)
+                if self.parity:
+                    position_bits.append(count % 2)
+                else:
+                    position_bits.append(0)
                 value_and_error = CONDUCTANCE_TABLE[tuple(position_bits)]
                 if self.sample:
                     value = np.random.normal(
@@ -71,5 +77,14 @@ class MeanReservoirGameEnvironment(GameEnvironment):
 
 
 class SampledReservoirGameEnvironment(MeanReservoirGameEnvironment):
+    name = "Sampled"
+
     def __init__(self, game: Game = Game()):
-        super().__init__(game, True)
+        super().__init__(game, sample=True, parity=True)
+
+
+class SampledNoParityReservoirGameEnvironment(MeanReservoirGameEnvironment):
+    name = "Sampled_NP"
+
+    def __init__(self, game: Game = Game()):
+        super().__init__(game, sample=True, parity=False)

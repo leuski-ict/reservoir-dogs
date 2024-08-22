@@ -35,12 +35,10 @@ class StableBaselineEnvironment(Env):
 
     def step(self, action):
         state, done, reward = self.tic_tac_toe.step(action=action)
-        if done or self.opponent is None:
-            return state, reward, done, False, {}
-        self.opponent.make_move(self.tic_tac_toe.game)
-        return self.tic_tac_toe.encoded_board(
-            self.this_player), self.tic_tac_toe.get_reward(
-            self.this_player), self.tic_tac_toe.game.done, False, {}
+        if not done and self.opponent is not None:
+            self.opponent.make_move(self.tic_tac_toe.game)
+            state, done, reward = self.tic_tac_toe.step_return(self.this_player)
+        return state, reward, done, False, {}
 
     def render(self, mode='human'):
         return

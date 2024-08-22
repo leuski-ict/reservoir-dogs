@@ -39,6 +39,10 @@ class GameEnvironment:
             reward = -10
         return self.encoded_board(player), self.game.done, reward
 
+    def step_return(self, player):
+        return self.encoded_board(player), self.game.done, self.get_reward(
+            player)
+
     def get_reward(self, current_player):
         if self.game.winner == current_player:
             return 1  # Reward for winning

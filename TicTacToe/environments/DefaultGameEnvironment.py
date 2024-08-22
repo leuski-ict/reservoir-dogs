@@ -4,6 +4,8 @@ import numpy as np
 
 
 class DefaultGameEnvironment(GameEnvironment):
+    name = "Default"
+
     def __init__(self, game: Game = Game()):
         super().__init__(game)
 

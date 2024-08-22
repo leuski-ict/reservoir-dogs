@@ -9,8 +9,5 @@ class StableBaselineMaskableAgent(StableBaselineAgent):
                                   action_masks=action_masks)[0]
 
     @staticmethod
-    def file_name(player, suffix):
-        if player == 1:
-            return "../maskable_x_ppo_tictactoe_" + suffix
-        else:
-            return "../maskable_o_ppo_tictactoe_" + suffix
+    def file_name(suffix):
+        return "../maskable_ppo_tictactoe_" + suffix
