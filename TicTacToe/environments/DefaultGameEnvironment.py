@@ -8,11 +8,11 @@ class SimpleTicTacToe(TicTacToeEnv):
         super().__init__(game)
 
     def encoded_board(self, current_player):
-        return self.game.board.flatten().astype(np.float32) * current_player
+        return self.game.board.to_array() * current_player
 
     @property
     def input_count(self):
-        return self.game.board_size * self.game.board_size
+        return self.game.board.area
 
     @property
     def min_input_value(self):

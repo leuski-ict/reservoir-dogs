@@ -26,20 +26,18 @@ class TicTacToeEnv:
 
     @property
     def output_count(self):
-        return self.game.board_size * self.game.board_size
+        return self.game.board.area
 
     def step(self, action, player=None):
         if player is None:
             player = self.game.current_player
         # Check if the action is valid (the cell is empty
         # and the game is not finished)
-        if self.game.done:
-            reward = self.get_reward(player)
-        elif self.game.make_move(action, player):
+        if self.game.done or self.game.make_move(action, player):
             reward = self.get_reward(player)
         else:
             reward = -10
-        return self.encoded_board(-player), self.game.done, reward
+        return self.encoded_board(player), self.game.done, reward
 
     def get_reward(self, current_player):
         if self.game.winner == current_player:
@@ -52,5 +50,5 @@ class TicTacToeEnv:
             return 0  # No reward if game is not done
 
     def action_masks(self):
-        result = [x == 0 for x in self.game.board.flatten()]
+        result = [x == 0 for x in self.game.board.to_array()]
         return result

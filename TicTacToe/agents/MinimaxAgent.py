@@ -1,4 +1,3 @@
-import functools
 import random
 
 from Game import TicTacToeGame
@@ -6,6 +5,8 @@ from agents.Agent import TicTacToeAgent
 
 
 class TicTacToeMinimaxAgent(TicTacToeAgent):
+    _cache = {}
+
     def __init__(self):
         super().__init__()
         self.epsilon = 0
@@ -62,10 +63,14 @@ class TicTacToeMinimaxAgent(TicTacToeAgent):
             player = game.current_player
         if self.epsilon > 0 and random.random() < self.epsilon:
             return random.choice(game.available_actions())
-        estimations = [(move, self.evaluate_move(move, game, 0, float('-inf'),
-                                                 float('inf'), player, False))
-                       for move in game.available_actions()]
-        max_estimation = max(estimations, key=lambda x: x[1])[1]
-        best_moves = [pair[0] for pair in estimations if
-                      pair[1] == max_estimation]
-        return random.choice(best_moves)
+        key = (game.board.board_x, game.board.board_o, player)
+        if key not in TicTacToeMinimaxAgent._cache:
+            estimations = [
+                (move, self.evaluate_move(move, game, 0, float('-inf'),
+                                          float('inf'), player, False))
+                for move in game.available_actions()]
+            max_estimation = max(estimations, key=lambda x: x[1])[1]
+            best_moves = [pair[0] for pair in estimations if
+                          pair[1] == max_estimation]
+            TicTacToeMinimaxAgent._cache[key] = best_moves
+        return random.choice(TicTacToeMinimaxAgent._cache[key])

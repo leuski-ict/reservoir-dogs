@@ -2,10 +2,10 @@ import random
 from Game import *
 
 
-def board_history_as_string(boards: [[[int]]]) -> str:
-    return "\n".join([" ".join([TicTacToeGame.board_row_as_string(board, row)
+def board_history_as_string(boards: [Board]) -> str:
+    return "\n".join([" ".join([board.row_as_string(row)
                                 for board in boards])
-                      for row in range(len(boards[0][0]))])
+                      for row in range(boards[0].size)])
 
 
 def evaluate(env, action_fn, num_games=100):

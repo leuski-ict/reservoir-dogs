@@ -22,4 +22,3 @@ class SBTicTacToeAgent(TicTacToeAgent):
     def select_action(self, player):
         observations = self.tic_tac_toe.encoded_board(player)
         return self.model.predict(observations, deterministic=True)[0]
-
