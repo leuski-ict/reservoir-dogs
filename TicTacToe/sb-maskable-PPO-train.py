@@ -19,8 +19,14 @@ class CustomCNN(BaseFeaturesExtractor):
     def __init__(self, observation_space, features_dim):
         super(CustomCNN, self).__init__(observation_space, features_dim)
         n_input_channels = observation_space.shape[0]
+        middle_1_channels = 64
         self.cnn = nn.Sequential(
-            nn.Linear(n_input_channels, features_dim)
+            nn.Linear(n_input_channels, features_dim),
+            # nn.Linear(n_input_channels, middle_1_channels),
+            # nn.ReLU(),
+            # nn.Linear(middle_1_channels, middle_1_channels),
+            # nn.ReLU(),
+            # nn.Linear(middle_1_channels, features_dim),
         )
 
     def forward(self, observations):

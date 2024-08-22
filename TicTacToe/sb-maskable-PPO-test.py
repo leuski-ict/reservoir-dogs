@@ -5,30 +5,21 @@ from agents.MinimaxAgent import TicTacToeMinimaxAgent
 from agents.StableBaselinesMaskableAgent import SBTicTacToeMaskableAgent
 from environments.MemristorGameEnvironment import TicTacToeFloatBits
 
-# env = SBMaskableTicTacToeEnv(TicTacToe())
-# # Load the trained model
-# sb_model = MaskablePPO.load("maskable_ppo_tictactoe", env=env)
-# evaluate(env, lambda obs: sb_model.predict(
-#     obs, action_masks=get_action_masks(env))[0])
 
-# tournament(
-#     # TicTacToeRandomAgent(),
-#     SBTicTacToeMaskableAgent(MaskablePPO.load("../maskable_x_ppo_tictactoe_f2"),
-#                              TicTacToeFloatBits),
-#     # TicTacToeRandomAgent()
-#     # SBTicTacToeMaskableAgent(MaskablePPO.load("maskable_o_ppo_tictactoe_f2"),
-#     #                          TicTacToeFloatBits),
-#     # TicTacToeMinimaxAgent(),
-#     TicTacToeMinimaxAgent(),
-# )
+def test(player, suffix):
+    file_name = SBTicTacToeMaskableAgent.file_name(player, suffix)
+    test_agent = SBTicTacToeMaskableAgent(
+        MaskablePPO.load(file_name), TicTacToeFloatBits)
+    if player == 1:
+        tournament(
+            test_agent,
+            TicTacToeMinimaxAgent(),
+        )
+    else:
+        tournament(
+            TicTacToeMinimaxAgent(),
+            test_agent,
+        )
 
-tournament(
-    # TicTacToeRandomAgent(),
-    SBTicTacToeMaskableAgent(MaskablePPO.load("../maskable_x_ppo_tictactoe_f3"),
-                             TicTacToeFloatBits),
-    # TicTacToeRandomAgent()
-    TicTacToeMinimaxAgent(),
-    # SBTicTacToeMaskableAgent(MaskablePPO.load("../maskable_o_ppo_tictactoe_f3"),
-    #                          TicTacToeFloatBits),
-    # TicTacToeMinimaxAgent(),
-)
+
+test(-1, "simple")
