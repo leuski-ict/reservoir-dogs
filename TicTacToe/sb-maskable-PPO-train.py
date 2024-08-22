@@ -52,7 +52,7 @@ def get_model(player, suffix):
             env=env), our_env
     except FileNotFoundError:
         return MaskablePPO('MlpPolicy', env, policy_kwargs=policy_kwargs,
-                           verbose=1), env
+                           verbose=1, tensorboard_log=log_dir), our_env
 
 
 def train(player, suffix):
