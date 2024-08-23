@@ -32,7 +32,7 @@ if not hasattr(FooAlgo, 'name'):
     print("does not Exists")
 
 
-def func_foo(a, b, c):
+def func_foo(a, b, c, d=None):
     values = locals()
     i = 5
     print(values)
