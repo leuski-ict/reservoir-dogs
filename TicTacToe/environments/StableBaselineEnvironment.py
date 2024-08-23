@@ -37,6 +37,9 @@ class StableBaselineEnvironment(Env):
         state, done, reward = self.tic_tac_toe.step(action=action)
         if not done and self.opponent is not None:
             self.opponent.make_move(self.tic_tac_toe.game)
+            # you can change this that it uses the minimaxAgent estimation
+            # to return the expected reward immediately. However, in our
+            # experiments a default agent trained that way performs worse.
             state, done, reward = self.tic_tac_toe.step_return(self.this_player)
         return state, reward, done, False, {}
 
