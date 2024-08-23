@@ -36,7 +36,6 @@ def evaluate(env, action_fn, num_games=100):
 
 
 def tournament(x_agent, o_agent, name="", num_games=100, print_history=False):
-    print("starting tournament")
     wins = {1: 0, -1: 0, 0: 0, None: 0}
     game = Game()
     for _ in range(num_games):
@@ -57,7 +56,8 @@ def tournament(x_agent, o_agent, name="", num_games=100, print_history=False):
     return wins[0]
 
 
-def test(player, nn_type, game_env_type, num_games=100, print_history=False):
+def test(player, nn_type, game_env_type, suffix=None,
+         num_games=100, print_history=False):
     name = experiment_name(locals())
     file_name = StableBaselineMaskableAgent.file_name(name)
     test_agent = StableBaselineMaskableAgent(
@@ -93,10 +93,14 @@ def experiment_name(args):
         nn_type = args["nn_type"]
         result.append(
             nn_type.name if hasattr(nn_type, "name") else nn_type.__name__)
+    if "suffix" in args:
+        suffix = args["suffix"]
+        if suffix is not None and len(suffix) > 0:
+            result.append(suffix)
     return "_".join(result)
 
 
-def opponent(player, nn_type, game_env_type):
+def opponent(player, nn_type, game_env_type, suffix=None):
     name = experiment_name(locals())
     log_dir = "../tmp/"
     os.makedirs(log_dir, exist_ok=True)
@@ -108,7 +112,7 @@ def opponent(player, nn_type, game_env_type):
         return MinimaxAgent()
 
 
-def get_model(player, nn_type, game_env_type):
+def get_model(player, nn_type, game_env_type, suffix=None):
     name = experiment_name(locals())
     log_dir = "../tmp/"
     os.makedirs(log_dir, exist_ok=True)
@@ -129,26 +133,27 @@ def get_model(player, nn_type, game_env_type):
         )
         return MaskablePPO('MlpPolicy', env, policy_kwargs=policy_kwargs,
                            verbose=1, device=DEVICE,
+                           learning_rate=5e-5,
                            tensorboard_log=log_dir), our_env
 
 
-def train_one(player, nn_type, game_env_type):
+def train_one(player, nn_type, game_env_type, suffix=None, steps=1_000_000):
     name = experiment_name(locals())
-    model, env = get_model(player, nn_type, game_env_type)
+    model, env = get_model(player, nn_type, game_env_type, suffix=suffix)
     env.opponent = MinimaxAgent()
-    model.learn(total_timesteps=1_000_000, tb_log_name=name)
+    model.learn(total_timesteps=steps, tb_log_name=name)
     model.save(StableBaselineMaskableAgent.file_name(name))
 
 
-def train_multiple(nn_type, game_env_type):
+def train_multiple(nn_type, game_env_type, suffix=None):
     name_values = locals()
     x_file_name = StableBaselineMaskableAgent.file_name(
         experiment_name({"player": 1} | name_values))
     o_file_name = StableBaselineMaskableAgent.file_name(
         experiment_name({"player": 1} | name_values))
 
-    model_x, env_x = get_model(1, nn_type, game_env_type)
-    model_o, env_o = get_model(-1, nn_type, game_env_type)
+    model_x, env_x = get_model(1, nn_type, game_env_type, suffix=suffix)
+    model_o, env_o = get_model(-1, nn_type, game_env_type, suffix=suffix)
     env_x.opponent = StableBaselineMaskableAgent(
         model_o, game_env_type)
     env_o.opponent = StableBaselineMaskableAgent(
