@@ -4,7 +4,7 @@ import torch.nn as nn
 import torch.optim as optim
 import numpy as np
 
-from environments.ReservoirGameEnvironment import CONDUCTANCE_TABLE, \
+from environments.reservoir.ReservoirGameEnvironment import CONDUCTANCE_TABLE, \
     CONDUCTANCE_TABLE_MAX, CONDUCTANCE_TABLE_MIN
 
 
@@ -73,44 +73,48 @@ class FullyConnectedNetwork(nn.Module):
         return x
 
 
-dataset = CustomDataset()
-dataloader = DataLoader(dataset, batch_size=16, shuffle=True)
-model = FullyConnectedNetwork(input_dim=1, output_dim=3)
-# Define loss function and optimizer
-#criterion = nn.MSELoss()
-criterion = nn.BCELoss()
-optimizer = optim.Adam(model.parameters(), lr=0.001)
+def train():
+    dataset = CustomDataset()
+    dataloader = DataLoader(dataset, batch_size=16, shuffle=True)
+    model = FullyConnectedNetwork(input_dim=1, output_dim=3)
+    # Define loss function and optimizer
+    # criterion = nn.MSELoss()
+    criterion = nn.BCELoss()
+    optimizer = optim.Adam(model.parameters(), lr=0.001)
 
-# Training loop
-num_epochs = 2000
-for epoch in range(num_epochs):
-    for inputs, targets in dataloader:
-        # Forward pass
-        outputs = model(inputs)
-        loss = criterion(outputs, targets)
+    # Training loop
+    num_epochs = 2000
+    loss = None
+    for epoch in range(num_epochs):
+        for inputs, targets in dataloader:
+            # Forward pass
+            outputs = model(inputs)
+            loss = criterion(outputs, targets)
 
-        # Backward pass and optimization
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
+            # Backward pass and optimization
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
 
-    if (epoch + 1) % 100 == 0:
-        print(f'Epoch [{epoch + 1}/{num_epochs}], Loss: {loss.item():.4f}')
+        if (epoch + 1) % 100 == 0:
+            print(f'Epoch [{epoch + 1}/{num_epochs}], Loss: {loss.item():.4f}')
 
-model.eval()
+    model.eval()
+    return model
 
 
-def test():
+def test(model):
     with torch.no_grad():
         for position in range(8):
             bit_values = bits_from_number(position, 3)
-            input = [encode_bits(np.array(bit_values[1]))]
+            inputs = [encode_bits(np.array(bit_values[1]))]
             target = bit_values[0]
-            x_test = torch.tensor(input, dtype=torch.float32).view(-1, 1)
+            x_test = torch.tensor(inputs, dtype=torch.float32).view(-1, 1)
             bit_predictions = model(x_test)
             # Convert probabilities to binary values
             bit_predictions = (bit_predictions > 0.5).int()
             print(f"{target} Predicted bits: {bit_predictions.numpy()[0]}")
 
 
-test()
+the_model = train()
+test(the_model)

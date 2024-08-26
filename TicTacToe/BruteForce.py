@@ -1,10 +1,11 @@
 import torch
 from torch.utils.data import Dataset, DataLoader
-from Game import Game
 from agents.MinimaxAgent import MinimaxAgent
 import torch.nn as nn
 import torch.optim as optim
-from environments.ReservoirGameEnvironment import *
+
+from environments.reservoir.Mean import MeanReservoirGameEnvironment
+from environments.reservoir.ReservoirGameEnvironment import *
 
 device = torch.device("cpu")
 
@@ -79,6 +80,7 @@ optimizer = optim.Adam(model.parameters(), lr=0.001)
 
 # Training loop
 num_epochs = 2000
+loss = None
 for epoch in range(num_epochs):
     for inputs, targets in dataloader:
         inputs, targets = inputs.to(device), targets.to(device)
