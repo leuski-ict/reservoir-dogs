@@ -1,6 +1,5 @@
 from Game import Game
 from environments.GameEnvironment import GameEnvironment
-import numpy as np
 
 
 class DefaultGameEnvironment(GameEnvironment):

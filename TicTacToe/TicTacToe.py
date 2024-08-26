@@ -133,7 +133,6 @@ def get_model(player, nn_type, game_env_type, suffix=None):
         )
         return MaskablePPO('MlpPolicy', env, policy_kwargs=policy_kwargs,
                            verbose=1, device=DEVICE,
-                           learning_rate=5e-5,
                            tensorboard_log=log_dir), our_env
 
 
