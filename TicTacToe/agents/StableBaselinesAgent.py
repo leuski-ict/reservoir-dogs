@@ -1,8 +1,12 @@
 from Game import Game
 from agents.Agent import AbstractAgent
+from environments.reservoir.ReservoirGameEnvironment import \
+    ReservoirGameEnvironment
 
 
 class StableBaselineAgent(AbstractAgent):
+    tic_tac_toe: ReservoirGameEnvironment | None
+
     def __init__(self, model, env_type):
         super().__init__()
         self.model = model
@@ -20,5 +24,5 @@ class StableBaselineAgent(AbstractAgent):
         game.make_move(action, player)
 
     def select_action(self, player):
-        observations = self.tic_tac_toe.encoded_board(player)
+        observations = self.tic_tac_toe.observation(player)
         return self.model.predict(observations, deterministic=True)[0]

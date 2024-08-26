@@ -31,10 +31,11 @@ class StableBaselineEnvironment(Env):
         if self.opponent is not None:
             while self.tic_tac_toe.game.current_player != self.this_player:
                 self.opponent.make_move(self.tic_tac_toe.game)
-        return self.tic_tac_toe.encoded_board(self.this_player), {}
+        return self.tic_tac_toe.observation(self.this_player), {}
 
     def step(self, action):
-        state, done, reward = self.tic_tac_toe.step(action=action)
+        state, done, reward = self.tic_tac_toe.step(
+            action=action, player=self.this_player)
         if not done and self.opponent is not None:
             self.opponent.make_move(self.tic_tac_toe.game)
             # you can change this that it uses the minimaxAgent estimation
