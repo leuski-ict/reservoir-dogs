@@ -1,10 +1,6 @@
 from TicTacToe import *
 from Networks import *
-from environments.reservoir.Sampled import *
-from environments.reservoir.SampledRoll import *
-from environments.reservoir.SampledWithEmpty import \
-    SampledZeroReservoirGameEnvironment, \
-    SampledZeroNoParityReservoirGameEnvironment
+from environments.reservoir import *
 
 # test(-1, DefaultNN, DefaultGameEnvironment, suffix="fast-reward-1",
 #      num_games=10000,

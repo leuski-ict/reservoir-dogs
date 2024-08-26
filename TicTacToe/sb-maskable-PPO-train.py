@@ -1,15 +1,13 @@
 from TicTacToe import train_one
 from Networks import *
-from environments.reservoir.Sampled import *
-from environments.reservoir.SampledRoll import *
-from environments.reservoir.SampledWithEmpty import *
+from environments.reservoir import *
 
 # train_one(-1, DefaultNN, DefaultGameEnvironment)
 # train_one(-1, DefaultNN, DefaultGameEnvironment, suffix="fast-reward-1")
 
 for nn in [
     SimpleNN,
-    OneLayerNN,
+    # OneLayerNN,
     # OneLayerWithTanhNN,
     # TwoLayerNN,
     # TwoLayerWithTanhSoftmaxNN,
@@ -20,17 +18,17 @@ for nn in [
     # TwoLayerRRelu32x32NN,
 ]:
     for env in [
-        # MeanReservoirGameEnvironment,
-        # MeanNoParityReservoirGameEnvironment,
-        # SampledReservoirGameEnvironment,
-        # SampledNoParityReservoirGameEnvironment,
+        MeanReservoirGameEnvironment,
+        MeanNoParityReservoirGameEnvironment,
+        SampledReservoirGameEnvironment,
+        SampledNoParityReservoirGameEnvironment,
         # DecodingReservoirGameEnvironment,
 
         # SampledZeroReservoirGameEnvironment,
         # SampledZeroNoParityReservoirGameEnvironment,
         # SampledRollReservoirGameEnvironment,
         # SampledRoll2ReservoirGameEnvironment,
-        Sampled10ReservoirGameEnvironment,
-        Sampled10NoParityReservoirGameEnvironment,
+        # Sampled10ReservoirGameEnvironment,
+        # Sampled10NoParityReservoirGameEnvironment,
     ]:
-        train_one(-1, nn, env, steps=1_000_000)
+        train_one(-1, nn, env, steps=25_000_000)

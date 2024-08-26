@@ -4,8 +4,7 @@ from agents.MinimaxAgent import MinimaxAgent
 import torch.nn as nn
 import torch.optim as optim
 
-from environments.reservoir.Mean import MeanReservoirGameEnvironment
-from environments.reservoir.ReservoirGameEnvironment import *
+from environments.reservoir import *
 
 device = torch.device("cpu")
 
