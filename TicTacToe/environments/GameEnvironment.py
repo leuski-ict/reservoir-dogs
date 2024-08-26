@@ -7,7 +7,10 @@ class GameEnvironment:
 
     def reset(self):
         self.game.reset()
-        return self.encoded_board(self.game.current_player), self.game.done
+        return self.observation(self.game.current_player), self.game.done
+
+    def observation(self, current_player):
+        return self.encoded_board(current_player)
 
     def encoded_board(self, current_player):
         raise NotImplementedError
@@ -37,10 +40,10 @@ class GameEnvironment:
             reward = self.get_reward(player)
         else:
             reward = -10
-        return self.encoded_board(player), self.game.done, reward
+        return self.observation(player), self.game.done, reward
 
     def step_return(self, player):
-        return self.encoded_board(player), self.game.done, self.get_reward(
+        return self.observation(player), self.game.done, self.get_reward(
             player)
 
     def get_reward(self, current_player):
