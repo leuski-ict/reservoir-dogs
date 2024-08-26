@@ -1,4 +1,6 @@
+import torch as th
 import torch.nn as nn
+from stable_baselines3.common.policies import ActorCriticPolicy
 from stable_baselines3.common.torch_layers import BaseFeaturesExtractor
 
 
@@ -107,6 +109,54 @@ class TwoLayerRReluNN(AbstractNN):
         )
 
 
+class TwoLayerRRelu16x16NN(AbstractNN):
+    def __init__(self, observation_space, features_dim):
+        super(TwoLayerRRelu16x16NN, self).__init__(observation_space,
+                                                   features_dim)
+        n_input_channels = observation_space.shape[0]
+        middle_1_channels = 16
+        middle_2_channels = 16
+        self.nn = nn.Sequential(
+            nn.Linear(n_input_channels, middle_1_channels),
+            nn.RReLU(),
+            nn.Linear(middle_1_channels, middle_2_channels),
+            nn.RReLU(),
+            nn.Linear(middle_2_channels, features_dim),
+        )
+
+
+class TwoLayerRRelu32x32NN(AbstractNN):
+    def __init__(self, observation_space, features_dim):
+        super(TwoLayerRRelu32x32NN, self).__init__(observation_space,
+                                                   features_dim)
+        n_input_channels = observation_space.shape[0]
+        middle_1_channels = 32
+        middle_2_channels = 32
+        self.nn = nn.Sequential(
+            nn.Linear(n_input_channels, middle_1_channels),
+            nn.RReLU(),
+            nn.Linear(middle_1_channels, middle_2_channels),
+            nn.RReLU(),
+            nn.Linear(middle_2_channels, features_dim),
+        )
+
+
+class TwoLayerRRelu16x32NN(AbstractNN):
+    def __init__(self, observation_space, features_dim):
+        super(TwoLayerRRelu16x32NN, self).__init__(observation_space,
+                                                   features_dim)
+        n_input_channels = observation_space.shape[0]
+        middle_1_channels = 16
+        middle_2_channels = 32
+        self.nn = nn.Sequential(
+            nn.Linear(n_input_channels, middle_1_channels),
+            nn.RReLU(),
+            nn.Linear(middle_1_channels, middle_2_channels),
+            nn.RReLU(),
+            nn.Linear(middle_2_channels, features_dim),
+        )
+
+
 class BitDecoder1NN(AbstractNN):
     def __init__(self, observation_space, features_dim):
         super(BitDecoder1NN, self).__init__(observation_space, features_dim)
@@ -122,3 +172,25 @@ class BitDecoder1NN(AbstractNN):
             nn.Tanh(),
             nn.Linear(middle_2_channels, features_dim),
         )
+
+
+class CustomLSTMNetwork(BaseFeaturesExtractor):
+    def __init__(self, observation_space, features_dim=128):
+        super(CustomLSTMNetwork, self).__init__(observation_space, features_dim)
+        self.lstm = nn.LSTM(
+            input_size=observation_space.shape[1],
+            hidden_size=features_dim, batch_first=True)
+        self.flatten = nn.Flatten()
+
+    def forward(self, observations: th.Tensor) -> th.Tensor:
+        # batch_size = observations.size(0)
+        lstm_out, _ = self.lstm(observations)
+        return self.flatten(lstm_out[:, -1, :])
+
+
+class CustomLSTMPolicy(ActorCriticPolicy):
+    def __init__(self, *args, **kwargs):
+        super(CustomLSTMPolicy, self).__init__(
+            *args, **kwargs,
+            features_extractor_class=CustomLSTMNetwork,
+            features_extractor_kwargs=dict(features_dim=128))
