@@ -1,4 +1,4 @@
-from TicTacToe import train_one
+from TicTacToe import *
 from Networks import *
 from environments.reservoir import *
 
@@ -16,13 +16,27 @@ for nn in [
     # TwoLayerRRelu16x16NN,
     # TwoLayerRRelu16x32NN,
     # TwoLayerRRelu32x32NN,
+    # CustomLSTMNetwork,
 ]:
     for env in [
-        MeanReservoirGameEnvironment,
-        MeanNoParityReservoirGameEnvironment,
-        SampledReservoirGameEnvironment,
-        SampledNoParityReservoirGameEnvironment,
+        # MeanReservoirGameEnvironment,
+        # MeanNoParityReservoirGameEnvironment,
+        # MeanNoParity1ReservoirGameEnvironment,
+        # SampledReservoirGameEnvironment,
+        # SampledNoParityReservoirGameEnvironment,
+        # SampledNoParity1ReservoirGameEnvironment,
         # DecodingReservoirGameEnvironment,
+
+        MeanRoll110ReservoirGameEnvironment,
+        MeanRoll111ReservoirGameEnvironment,
+        # SampledRoll110ReservoirGameEnvironment,
+        # SampledRoll111ReservoirGameEnvironment,
+        # SampledRoll120ReservoirGameEnvironment,
+        # SampledRoll121ReservoirGameEnvironment,
+        # SampledRoll130ReservoirGameEnvironment,
+        # SampledRoll131ReservoirGameEnvironment,
+        # SampledRoll140ReservoirGameEnvironment,
+        # SampledRoll141ReservoirGameEnvironment,
 
         # SampledZeroReservoirGameEnvironment,
         # SampledZeroNoParityReservoirGameEnvironment,
@@ -30,5 +44,13 @@ for nn in [
         # SampledRoll2ReservoirGameEnvironment,
         # Sampled10ReservoirGameEnvironment,
         # Sampled10NoParityReservoirGameEnvironment,
+        # SequenceReservoirGameEnvironment,
+        # SampledRowReservoirGameEnvironment,
+        # SampledRoll4ReservoirGameEnvironment,
+        # SampledRoll41ReservoirGameEnvironment,
+        # SampledRoll50ReservoirGameEnvironment,
+        # SampledRoll51ReservoirGameEnvironment,
+        # SampledRoll52ReservoirGameEnvironment,
+        # SampledRoll53ReservoirGameEnvironment,
     ]:
-        train_one(-1, nn, env, steps=25_000_000)
+        train_one(-1, nn, env, suffix="2", steps=1_000_000)

@@ -1,41 +1,51 @@
-from enum import Enum
+class Foo(object):
+    def __init__(self):
+        pass
 
-test1 = dict(type='int', num_values=9)
-print(test1["num_values"])
+    @staticmethod
+    def get_name():
+        return __class__.__name__
 
 
-class FooAlgo:
-    name = "Foo"
+class Bar(Foo):
+    @staticmethod
+    def get_name():
+        return "Barrr"
 
 
-class BarAlgo:
+class Car(Foo):
     pass
 
 
-the_type = FooAlgo
-print(type(the_type))
-print(the_type.__name__)
+print(Foo.get_name())
+print(Bar.get_name())
+print(Car.get_name())
 
 
-class Algo(Enum):
-    FOO = FooAlgo
-    BAR = BarAlgo
-
-    def __str__(self):
-        return self.value.__name__
-
-
-value = Algo.BAR
-print(value)
-
-if not hasattr(FooAlgo, 'name'):
-    print("does not Exists")
+class GameEnvironmentNameDescriptor(object):
+    def __get__(self, obj, type_):
+        try:
+            return type_.__dict__['_name']
+        except KeyError:
+            return type_.__name__
 
 
-def func_foo(a, b, c, d=None):
-    values = locals()
-    i = 5
-    print(values)
+class Base(object):
+    name = GameEnvironmentNameDescriptor()
 
 
-func_foo(1, 2, 3)
+class Sub(Base):
+    pass
+
+
+class Sub1(Sub):
+    _name = "custom_sub"
+
+
+class Sub2(Sub1):
+    pass
+
+
+print(Sub.name)
+print(Sub1.name)
+print(Sub2.name)

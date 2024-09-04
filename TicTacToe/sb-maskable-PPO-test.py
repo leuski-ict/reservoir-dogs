@@ -8,7 +8,7 @@ from environments.reservoir import *
 
 for nn in [
     SimpleNN,
-    OneLayerNN,
+    # OneLayerNN,
     # OneLayerWithTanhNN,
     # TwoLayerNN,
     # TwoLayerWithTanhSoftmaxNN,
@@ -21,17 +21,40 @@ for nn in [
     for env in [
         # MeanReservoirGameEnvironment,
         # MeanNoParityReservoirGameEnvironment,
+        # MeanNoParity1ReservoirGameEnvironment,
         # SampledReservoirGameEnvironment,
         # SampledNoParityReservoirGameEnvironment,
+        # SampledNoParity1ReservoirGameEnvironment,
+        # DecodingReservoirGameEnvironment,
+
+        MeanRoll110ReservoirGameEnvironment,
+        MeanRoll111ReservoirGameEnvironment,
+        # SampledRoll110ReservoirGameEnvironment,
+        # SampledRoll111ReservoirGameEnvironment,
+        # SampledRoll120ReservoirGameEnvironment,
+        # SampledRoll121ReservoirGameEnvironment,
+        # SampledRoll130ReservoirGameEnvironment,
+        # SampledRoll131ReservoirGameEnvironment,
+        # SampledRoll140ReservoirGameEnvironment,
+        # SampledRoll141ReservoirGameEnvironment,
+
         # SampledZeroReservoirGameEnvironment,
         # SampledZeroNoParityReservoirGameEnvironment,
         # SampledRollReservoirGameEnvironment,
         # SampledRoll2ReservoirGameEnvironment,
-        Sampled10ReservoirGameEnvironment,
-        Sampled10NoParityReservoirGameEnvironment,
+        # Sampled10ReservoirGameEnvironment,
+        # Sampled10NoParityReservoirGameEnvironment,
+        # SequenceReservoirGameEnvironment,
+        # SampledRowReservoirGameEnvironment,
+        # SampledRoll4ReservoirGameEnvironment,
+        # SampledRoll41ReservoirGameEnvironment,
+        # SampledRoll50ReservoirGameEnvironment,
+        # SampledRoll51ReservoirGameEnvironment,
+        # SampledRoll52ReservoirGameEnvironment,
+        # SampledRoll53ReservoirGameEnvironment,
     ]:
         try:
-            test(-1, nn, env, num_games=10000,
+            test(-1, nn, env, suffix="2", num_games=10_000,
                  print_history=False)
         except FileNotFoundError:
             pass
