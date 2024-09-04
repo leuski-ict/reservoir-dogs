@@ -24,7 +24,8 @@ class StableBaselineEnvironment(Env):
         return spaces.Box(
             low=self.tic_tac_toe.min_input_value,
             high=self.tic_tac_toe.max_input_value,
-            shape=(self.tic_tac_toe.input_count,), dtype=np.float32)
+            shape=self.tic_tac_toe.observation_space_shape,
+            dtype=np.float32)
 
     def reset(self, **kwargs):
         self.tic_tac_toe.reset()

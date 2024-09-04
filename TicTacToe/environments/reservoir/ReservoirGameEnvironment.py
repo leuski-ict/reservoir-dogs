@@ -29,10 +29,11 @@ CONDUCTANCE_TABLE_MAX = max(
 
 
 class ReservoirGameEnvironment(GameEnvironment):
-    def __init__(self, game: Game, sample: int, parity: bool):
+    def __init__(self, game: Game, sample: int, parity: int, piece: int = 0):
         super().__init__(game)
         self.sample = sample
         self.parity = parity
+        self.piece = piece
 
     @staticmethod
     def encode_4_bits(bits, sample: int):
@@ -49,39 +50,41 @@ class ReservoirGameEnvironment(GameEnvironment):
             return [value_and_error[0]]
 
     @staticmethod
-    def bits_for_row_on(board: Board, player, row: int):
+    def bits_for_row_on(board: Board, player, row: int, piece=0):
         position_bits = []
         count = 0
         for j in range(board.size):
             if board[row, j] == player:
-                position_bits.append(1)
+                position_bits.append(piece)
                 count += 1
             else:
-                position_bits.append(0)
+                position_bits.append(1 - piece)
         return position_bits, count
 
     @staticmethod
-    def bits_with_parity_for_row_on(board: Board, player, row: int, parity):
+    def bits_with_parity_for_row_on(
+            board: Board, player, row: int, parity, piece):
         position_bits, count = ReservoirGameEnvironment.bits_for_row_on(
-            board, player, row)
-        if parity:
-            position_bits.append(count % 2)
+            board, player, row, piece=piece)
+        if parity == 1 or parity == 0:
+            position_bits.append(parity)
         else:
-            position_bits.append(0)
+            position_bits.append(count % 2)
         return position_bits
 
     @staticmethod
-    def encode_all_bits(bits, sample: int):
+    def encode_all_bits(bits, sample: int, padding=0):
+        bits_tail = len(bits) % 4
+        if bits_tail != 0:
+            bits = bits + [padding for _ in range(4 - bits_tail)]
         encoded_bits = []
-        for index in range(len(bits) // 4):
-            encoded_bits += ReservoirGameEnvironment.encode_4_bits(
-                bits[4 * index:4 * index + 4], sample)
-        if len(bits) % 4 != 0:
-            index = 4 * (len(bits) // 4)
-            remainder = bits[index:len(bits)] + [
-                0 for _ in range(4 - len(bits) + index)]
-            encoded_bits += ReservoirGameEnvironment.encode_4_bits(
-                remainder, sample)
+        # len(bits) is divisible by 4.
+        for index in range(0, len(bits), 4):
+            encoded = ReservoirGameEnvironment.encode_4_bits(
+                bits[index:index + 4], sample)
+            encoded_bits += encoded
+            # print(bits[index:index + 4], encoded)
+        # print("")
         return np.array(encoded_bits, dtype=np.float32)
 
     @property
@@ -101,5 +104,6 @@ class ReservoirGameEnvironment(GameEnvironment):
         for player in [current_player, -current_player]:
             for row_index in range(self.game.board.size):
                 bits += ReservoirGameEnvironment.bits_with_parity_for_row_on(
-                    self.game.board, player, row_index, self.parity)
+                    self.game.board, player, row_index, self.parity,
+                    piece=self.piece)
         return ReservoirGameEnvironment.encode_all_bits(bits, self.sample)

@@ -16,6 +16,10 @@ class GameEnvironment:
         raise NotImplementedError
 
     @property
+    def observation_space_shape(self):
+        return (self.input_count,)
+
+    @property
     def input_count(self):
         raise NotImplementedError
 

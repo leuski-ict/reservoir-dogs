@@ -10,7 +10,7 @@ class Decoding(ReservoirGameEnvironment):
     name = "Decoding"
 
     def __init__(self, game: Game = Game()):
-        super().__init__(game, sample=1, parity=True)
+        super().__init__(game, sample=1, parity=2)
 
     @property
     def input_count(self):
@@ -31,7 +31,7 @@ class Decoding(ReservoirGameEnvironment):
         for player in [current_player, -current_player]:
             for i in range(self.game.board.size):
                 bits = ReservoirGameEnvironment.bits_with_parity_for_row_on(
-                    self.game.board, player, i, self.parity)
+                    self.game.board, player, i, self.parity, piece=self.piece)
                 value = ReservoirGameEnvironment.encode_4_bits(
                     bits, self.sample)
 
