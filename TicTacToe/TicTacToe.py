@@ -5,6 +5,7 @@ from sb3_contrib import MaskablePPO
 
 from Board import *
 from Game import Game
+from Networks import CustomLSTMPolicy
 from agents.MinimaxAgent import MinimaxAgent
 from agents.StableBaselinesMaskableAgent import StableBaselineMaskableAgent
 from environments.MaskableStableBaselineEnvironment import \
@@ -136,9 +137,36 @@ def get_model(player, nn_type, game_env_type, suffix=None):
                            tensorboard_log=log_dir), our_env
 
 
+def get_seq_model(player, nn_type, game_env_type, suffix=None):
+    name = experiment_name(locals())
+    log_dir = "../tmp/"
+    os.makedirs(log_dir, exist_ok=True)
+    game_env = game_env_type()
+    our_env = MaskableStableBaselineEnvironment(game_env, player)
+    env = check_env(Monitor(our_env, log_dir))
+    #    callback = EvalCallback(eval_freq=1000, log_path=log_dir)
+    try:
+        return MaskablePPO.load(
+            StableBaselineMaskableAgent.file_name(name),
+            device=DEVICE,
+            env=env), our_env
+    except FileNotFoundError:
+        return MaskablePPO(CustomLSTMPolicy, env,
+                           verbose=1, device=DEVICE,
+                           tensorboard_log=log_dir), our_env
+
+
 def train_one(player, nn_type, game_env_type, suffix=None, steps=1_000_000):
     name = experiment_name(locals())
     model, env = get_model(player, nn_type, game_env_type, suffix=suffix)
+    env.opponent = MinimaxAgent(epsilon=0.0)
+    model.learn(total_timesteps=steps, tb_log_name=name)
+    model.save(StableBaselineMaskableAgent.file_name(name))
+
+
+def train_seq_one(player, nn_type, game_env_type, suffix=None, steps=1_000_000):
+    name = experiment_name(locals())
+    model, env = get_seq_model(player, nn_type, game_env_type, suffix=suffix)
     env.opponent = MinimaxAgent()
     model.learn(total_timesteps=steps, tb_log_name=name)
     model.save(StableBaselineMaskableAgent.file_name(name))

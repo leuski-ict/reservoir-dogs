@@ -1,6 +1,6 @@
 import torch as th
 import torch.nn as nn
-from stable_baselines3.common.policies import ActorCriticPolicy
+from sb3_contrib.common.maskable.policies import MaskableActorCriticPolicy
 from stable_baselines3.common.torch_layers import BaseFeaturesExtractor
 
 
@@ -188,7 +188,7 @@ class CustomLSTMNetwork(BaseFeaturesExtractor):
         return self.flatten(lstm_out[:, -1, :])
 
 
-class CustomLSTMPolicy(ActorCriticPolicy):
+class CustomLSTMPolicy(MaskableActorCriticPolicy):
     def __init__(self, *args, **kwargs):
         super(CustomLSTMPolicy, self).__init__(
             *args, **kwargs,
