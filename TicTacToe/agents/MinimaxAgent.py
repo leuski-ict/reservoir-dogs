@@ -7,9 +7,9 @@ from agents.Agent import AbstractAgent
 class MinimaxAgent(AbstractAgent):
     _cache = {}
 
-    def __init__(self):
+    def __init__(self, epsilon=0):
         super().__init__()
-        self.epsilon = 0
+        self.epsilon = epsilon
 
     def make_move(self, game: Game, player=None) -> None:
         if game.done:
