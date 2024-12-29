@@ -27,8 +27,14 @@ for nn in [
         # SampledNoParity1ReservoirGameEnvironment,
         # DecodingReservoirGameEnvironment,
 
-        MeanRoll110ReservoirGameEnvironment,
-        MeanRoll111ReservoirGameEnvironment,
+        # MeanSpacedCounterGameEnvironment,
+        # SampledSpacedCounterGameEnvironment,
+
+        MeanDenseCounterGameEnvironment,
+        SampledDenseCounterGameEnvironment,
+
+        # MeanRoll110ReservoirGameEnvironment,
+        # MeanRoll111ReservoirGameEnvironment,
         # SampledRoll110ReservoirGameEnvironment,
         # SampledRoll111ReservoirGameEnvironment,
         # SampledRoll120ReservoirGameEnvironment,
@@ -53,4 +59,4 @@ for nn in [
         # SampledRoll52ReservoirGameEnvironment,
         # SampledRoll53ReservoirGameEnvironment,
     ]:
-        train_one(-1, nn, env, suffix="2", steps=1_000_000)
+        train_one(-1, nn, env, suffix="0", steps=1_000_000)

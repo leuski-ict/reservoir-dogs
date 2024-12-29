@@ -27,8 +27,14 @@ for nn in [
         # SampledNoParity1ReservoirGameEnvironment,
         # DecodingReservoirGameEnvironment,
 
-        MeanRoll110ReservoirGameEnvironment,
-        MeanRoll111ReservoirGameEnvironment,
+        # MeanSpacedCounterGameEnvironment,
+        # SampledSpacedCounterGameEnvironment,
+
+        MeanDenseCounterGameEnvironment,
+        SampledDenseCounterGameEnvironment,
+
+        # MeanRoll110ReservoirGameEnvironment,
+        # MeanRoll111ReservoirGameEnvironment,
         # SampledRoll110ReservoirGameEnvironment,
         # SampledRoll111ReservoirGameEnvironment,
         # SampledRoll120ReservoirGameEnvironment,
@@ -54,7 +60,7 @@ for nn in [
         # SampledRoll53ReservoirGameEnvironment,
     ]:
         try:
-            test(-1, nn, env, suffix="2", num_games=10_000,
+            test(-1, nn, env, suffix="0", num_games=10_000,
                  print_history=False)
         except FileNotFoundError:
             pass

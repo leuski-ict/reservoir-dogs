@@ -3,6 +3,7 @@ import importlib
 import inspect
 
 from .Decoding import *
+from .Counter import *
 from .Mean import *
 from .ReservoirGameEnvironment import *
 from .Sampled import *
