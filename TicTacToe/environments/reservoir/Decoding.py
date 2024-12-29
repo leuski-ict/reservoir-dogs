@@ -3,7 +3,7 @@ from scipy.stats import norm
 
 from Game import Game
 from environments.reservoir.ReservoirGameEnvironment import \
-    ReservoirGameEnvironment, CONDUCTANCE_TABLE
+    ReservoirGameEnvironment
 
 
 class Decoding(ReservoirGameEnvironment):
@@ -32,12 +32,12 @@ class Decoding(ReservoirGameEnvironment):
             for i in range(self.game.board.size):
                 bits = ReservoirGameEnvironment.bits_with_parity_for_row_on(
                     self.game.board, player, i, self.parity, piece=self.piece)
-                value = ReservoirGameEnvironment.encode_4_bits(
+                value = self.table.encode_4_bits(
                     bits, self.sample)
 
-                for key in CONDUCTANCE_TABLE:
+                for key in self.table.table:
                     if key not in Decoding.distributions:
-                        mean_and_error = CONDUCTANCE_TABLE[key]
+                        mean_and_error = self.table.table[key]
                         distribution = norm(
                             loc=mean_and_error[0], scale=mean_and_error[1] / 2)
                         scale = distribution.pdf(mean_and_error[0])

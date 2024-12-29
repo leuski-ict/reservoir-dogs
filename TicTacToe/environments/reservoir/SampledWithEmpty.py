@@ -21,7 +21,7 @@ class SampledZeroReservoirGameEnvironment(SampledReservoirGameEnvironment):
                 bits += ReservoirGameEnvironment.bits_with_parity_for_row_on(
                     self.game.board, player, row_index, self.parity,
                     piece=self.piece)
-        return ReservoirGameEnvironment.encode_all_bits(bits, self.sample)
+        return self.table.encode_all_bits(bits, self.sample)
 
 
 class SampledZeroNoParityReservoirGameEnvironment(

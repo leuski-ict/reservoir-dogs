@@ -9,6 +9,7 @@ from .Sampled import *
 from .SampledRoll import *
 from .SampledWithEmpty import *
 from .Sequence import *
+from .ConductanceTable import *
 
 # Initialize an empty list to store all classes
 __all__ = []

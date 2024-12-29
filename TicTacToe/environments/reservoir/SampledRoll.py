@@ -32,7 +32,7 @@ class SampledRollReservoirGameEnvironment(ReservoirGameEnvironment):
                     # 3 columns
                     bits += ReservoirGameEnvironment.bits_for_row_on(
                         self.game.board, player, row_index, piece=self.piece)[0]
-        return ReservoirGameEnvironment.encode_all_bits(bits, self.sample)
+        return self.table.encode_all_bits(bits, self.sample)
 
 
 class SampledRoll2ReservoirGameEnvironment(ReservoirGameEnvironment):
@@ -62,7 +62,7 @@ class SampledRoll2ReservoirGameEnvironment(ReservoirGameEnvironment):
                 # repeat four times
                 for _ in range(4):
                     bits += row_bits
-        return ReservoirGameEnvironment.encode_all_bits(bits, self.sample)
+        return self.table.encode_all_bits(bits, self.sample)
 
 
 class SampledRoll3ReservoirGameEnvironment(ReservoirGameEnvironment):
@@ -90,7 +90,7 @@ class SampledRoll3ReservoirGameEnvironment(ReservoirGameEnvironment):
                     self.game.board, player, row_index, piece=self.piece)[0]
                 for _ in range(2):
                     bits += row_bits
-        return ReservoirGameEnvironment.encode_all_bits(bits, self.sample)
+        return self.table.encode_all_bits(bits, self.sample)
 
 
 class SampledRowReservoirGameEnvironment(ReservoirGameEnvironment):
@@ -121,7 +121,7 @@ class SampledRowReservoirGameEnvironment(ReservoirGameEnvironment):
                 for row_bit in row_bits:
                     for _ in range(4):
                         bits.append(row_bit)
-        return ReservoirGameEnvironment.encode_all_bits(bits, self.sample)
+        return self.table.encode_all_bits(bits, self.sample)
 
 
 class RepeatReservoirGameEnvironment(ReservoirGameEnvironment):
@@ -154,7 +154,7 @@ class RepeatReservoirGameEnvironment(ReservoirGameEnvironment):
                     self.game.board, player, row_index, piece=self.piece)[0]
                 for _ in range(self.repeat):
                     bits += row_bits
-        return ReservoirGameEnvironment.encode_all_bits(
+        return self.table.encode_all_bits(
             bits, self.sample, padding=self.padding)
 
 
@@ -292,7 +292,7 @@ class SampledRoll4ReservoirGameEnvironment(ReservoirGameEnvironment):
                 # 3 columns
                 bits += ReservoirGameEnvironment.bits_for_row_on(
                     self.game.board, player, row_index, piece=self.piece)[0]
-        return ReservoirGameEnvironment.encode_all_bits(bits, self.sample)
+        return self.table.encode_all_bits(bits, self.sample)
 
 
 class SampledRoll41ReservoirGameEnvironment(ReservoirGameEnvironment):
@@ -319,7 +319,7 @@ class SampledRoll41ReservoirGameEnvironment(ReservoirGameEnvironment):
                 # 3 columns
                 bits += ReservoirGameEnvironment.bits_for_row_on(
                     self.game.board, player, row_index, piece=self.piece)[0]
-        return ReservoirGameEnvironment.encode_all_bits(bits, self.sample)
+        return self.table.encode_all_bits(bits, self.sample)
 
 
 class SampledRoll50ReservoirGameEnvironment(ReservoirGameEnvironment):
@@ -355,7 +355,7 @@ class SampledRoll50ReservoirGameEnvironment(ReservoirGameEnvironment):
                     bits.append(0)
         for _ in range(4 - self.space):
             bits.append(0)
-        return ReservoirGameEnvironment.encode_all_bits(bits, self.sample)
+        return self.table.encode_all_bits(bits, self.sample)
 
 
 class SampledRoll51ReservoirGameEnvironment(

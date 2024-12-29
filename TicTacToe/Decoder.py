@@ -4,19 +4,19 @@ import torch.nn as nn
 import torch.optim as optim
 import numpy as np
 
-from environments.reservoir.ReservoirGameEnvironment import CONDUCTANCE_TABLE, \
-    CONDUCTANCE_TABLE_MAX, CONDUCTANCE_TABLE_MIN
+from environments.reservoir.ConductanceTable import ConductanceTable, \
+    original_table
 
 
-def encode_bits_conductance(conductance):
+def encode_bits_conductance(conductance, table: ConductanceTable):
     sample = np.random.normal(conductance[0], conductance[1])
-    return max(min(sample, CONDUCTANCE_TABLE_MAX),
-               CONDUCTANCE_TABLE_MIN)
+    return max(min(sample, table.table_max),
+               table.table_min)
 
 
-def encode_bits(bit_values):
-    conductance = CONDUCTANCE_TABLE[tuple(bit_values)]
-    return encode_bits_conductance(conductance)
+def encode_bits(bit_values, table: ConductanceTable):
+    conductance = table.table[tuple(bit_values)]
+    return encode_bits_conductance(conductance, table)
 
 
 def bits_from_number(value, size):
@@ -35,15 +35,15 @@ def bits_from_number(value, size):
 
 
 class CustomDataset(Dataset):
-    def __init__(self):
+    def __init__(self, table: ConductanceTable):
         self.inputs = []
         self.targets = []
         for position in range(8):
             bit_values = bits_from_number(position, 3)
-            conductance = CONDUCTANCE_TABLE[tuple(bit_values[1])]
+            conductance = table.table[tuple(bit_values[1])]
             target = [float(x) for x in bit_values[0]]
             for sample_index in range(100):
-                sample = encode_bits_conductance(conductance)
+                sample = encode_bits_conductance(conductance, table)
                 self.inputs.append([sample])
                 self.targets.append(target)
 
@@ -74,7 +74,7 @@ class FullyConnectedNetwork(nn.Module):
 
 
 def train():
-    dataset = CustomDataset()
+    dataset = CustomDataset(original_table)
     dataloader = DataLoader(dataset, batch_size=16, shuffle=True)
     model = FullyConnectedNetwork(input_dim=1, output_dim=3)
     # Define loss function and optimizer
@@ -103,11 +103,11 @@ def train():
     return model
 
 
-def test(model):
+def test(model, table: ConductanceTable = original_table):
     with torch.no_grad():
         for position in range(8):
             bit_values = bits_from_number(position, 3)
-            inputs = [encode_bits(np.array(bit_values[1]))]
+            inputs = [encode_bits(np.array(bit_values[1]), table)]
             target = bit_values[0]
             x_test = torch.tensor(inputs, dtype=torch.float32).view(-1, 1)
             bit_predictions = model(x_test)
