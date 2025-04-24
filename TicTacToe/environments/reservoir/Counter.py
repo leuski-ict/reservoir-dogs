@@ -1,6 +1,7 @@
 from Game import Game
 from environments.reservoir.ReservoirGameEnvironment import \
     ReservoirGameEnvironment
+from environments.reservoir.ConductanceTable import *
 
 
 class SampledSpacedCounterGameEnvironment(ReservoirGameEnvironment):
@@ -9,8 +10,9 @@ class SampledSpacedCounterGameEnvironment(ReservoirGameEnvironment):
     """
     name = "SampledSpacedCounter"
 
-    def __init__(self, game: Game = Game(), sample: int = 1):
-        super().__init__(game, sample=sample, parity=2)
+    def __init__(self, game: Game = Game(),
+                 sample: int = 1, table: ConductanceTable = original_table):
+        super().__init__(game, sample=sample, parity=2, table=table)
 
     @property
     def input_count(self):
@@ -36,8 +38,9 @@ class MeanSpacedCounterGameEnvironment(SampledSpacedCounterGameEnvironment):
     """
     name = "MeanSpacedCounter"
 
-    def __init__(self, game: Game = Game()):
-        super().__init__(game, sample=0)
+    def __init__(self, game: Game = Game(),
+                 table: ConductanceTable = original_table):
+        super().__init__(game, sample=0, table=table)
 
 
 class SampledDenseCounterGameEnvironment(ReservoirGameEnvironment):
@@ -46,8 +49,9 @@ class SampledDenseCounterGameEnvironment(ReservoirGameEnvironment):
     """
     name = "SampledDenseCounter"
 
-    def __init__(self, game: Game = Game(), sample: int = 1):
-        super().__init__(game, sample=sample, parity=2)
+    def __init__(self, game: Game = Game(), sample: int = 1,
+                 table: ConductanceTable = original_table):
+        super().__init__(game, sample=sample, parity=2, table=table)
 
     @property
     def input_count(self):
@@ -69,7 +73,7 @@ class SampledDenseCounterGameEnvironment(ReservoirGameEnvironment):
         for element in base5:
             for index in range(element):
                 bits += [1]
-            for index in range(4-element):
+            for index in range(4 - element):
                 bits += [0]
         while len(bits) < 28:
             bits += [0]
@@ -82,8 +86,9 @@ class MeanDenseCounterGameEnvironment(SampledDenseCounterGameEnvironment):
     """
     name = "MeanDenseCounter"
 
-    def __init__(self, game: Game = Game()):
-        super().__init__(game, sample=0)
+    def __init__(self, game: Game = Game(),
+                 table: ConductanceTable = original_table):
+        super().__init__(game, sample=0, table=table)
 
 
 def base3_to_base5(base3_array):
@@ -103,3 +108,178 @@ def base3_to_base5(base3_array):
 
     return base5_array
 
+
+class SampledSpacedCounterGameEnvironment1(SampledSpacedCounterGameEnvironment):
+    """
+    encode a value using the number of bits in the reservoir set.
+    """
+    table = table_5_1_0_2s
+    name = "SampledSpacedCounter" + "_" + table.name
+
+    def __init__(self, game: Game = Game()):
+        super().__init__(game, table=self.__class__.table)
+
+
+class MeanSpacedCounterGameEnvironment1(MeanSpacedCounterGameEnvironment):
+    """
+    encode a value using the number of bits in the reservoir set.
+    """
+    table = table_5_1_0_2s
+    name = "MeanSpacedCounter" + "_" + table.name
+
+    def __init__(self, game: Game = Game()):
+        super().__init__(game, table=self.__class__.table)
+
+
+class SampledSpacedCounterGameEnvironment2(SampledSpacedCounterGameEnvironment):
+    """
+    encode a value using the number of bits in the reservoir set.
+    """
+    table = table_5_2_0_5s
+    name = "SampledSpacedCounter" + "_" + table.name
+
+    def __init__(self, game: Game = Game()):
+        super().__init__(game, table=self.__class__.table)
+
+
+class MeanSpacedCounterGameEnvironment2(MeanSpacedCounterGameEnvironment):
+    """
+    encode a value using the number of bits in the reservoir set.
+    """
+    table = table_5_2_0_5s
+    name = "MeanSpacedCounter" + "_" + table.name
+
+    def __init__(self, game: Game = Game()):
+        super().__init__(game, table=self.__class__.table)
+
+
+class SampledSpacedCounterGameEnvironment3(SampledSpacedCounterGameEnvironment):
+    """
+    encode a value using the number of bits in the reservoir set.
+    """
+    table = table_5_3_1s
+    name = "SampledSpacedCounter" + "_" + table.name
+
+    def __init__(self, game: Game = Game()):
+        super().__init__(game, table=self.__class__.table)
+
+
+class MeanSpacedCounterGameEnvironment3(MeanSpacedCounterGameEnvironment):
+    """
+    encode a value using the number of bits in the reservoir set.
+    """
+    table = table_5_3_1s
+    name = "MeanSpacedCounter" + "_" + table.name
+
+    def __init__(self, game: Game = Game()):
+        super().__init__(game, table=self.__class__.table)
+
+
+class SampledSpacedCounterGameEnvironment4(SampledSpacedCounterGameEnvironment):
+    """
+    encode a value using the number of bits in the reservoir set.
+    """
+    table = table_5_4_2s
+    name = "SampledSpacedCounter" + "_" + table.name
+
+    def __init__(self, game: Game = Game()):
+        super().__init__(game, table=self.__class__.table)
+
+
+class MeanSpacedCounterGameEnvironment4(MeanSpacedCounterGameEnvironment):
+    """
+    encode a value using the number of bits in the reservoir set.
+    """
+    table = table_5_4_2s
+    name = "MeanSpacedCounter" + "_" + table.name
+
+    def __init__(self, game: Game = Game()):
+        super().__init__(game, table=self.__class__.table)
+
+
+class SampledSpacedCounterGameEnvironment5(SampledSpacedCounterGameEnvironment):
+    """
+    encode a value using the number of bits in the reservoir set.
+    """
+    table = table_5_5_1s_0_2s
+    name = "SampledSpacedCounter" + "_" + table.name
+
+    def __init__(self, game: Game = Game()):
+        super().__init__(game, table=self.__class__.table)
+
+
+class MeanSpacedCounterGameEnvironment5(MeanSpacedCounterGameEnvironment):
+    """
+    encode a value using the number of bits in the reservoir set.
+    """
+    table = table_5_5_1s_0_2s
+    name = "MeanSpacedCounter" + "_" + table.name
+
+    def __init__(self, game: Game = Game()):
+        super().__init__(game, table=self.__class__.table)
+
+
+class SampledSpacedCounterGameEnvironment6(SampledSpacedCounterGameEnvironment):
+    """
+    encode a value using the number of bits in the reservoir set.
+    """
+    table = table_5_6_1s_0_5s
+    name = "SampledSpacedCounter" + "_" + table.name
+
+    def __init__(self, game: Game = Game()):
+        super().__init__(game, table=self.__class__.table)
+
+
+class MeanSpacedCounterGameEnvironment6(MeanSpacedCounterGameEnvironment):
+    """
+    encode a value using the number of bits in the reservoir set.
+    """
+    table = table_5_6_1s_0_5s
+    name = "MeanSpacedCounter" + "_" + table.name
+
+    def __init__(self, game: Game = Game()):
+        super().__init__(game, table=self.__class__.table)
+
+
+class SampledSpacedCounterGameEnvironment7(SampledSpacedCounterGameEnvironment):
+    """
+    encode a value using the number of bits in the reservoir set.
+    """
+    table = table_5_7_2s_0_5s
+    name = "SampledSpacedCounter" + "_" + table.name
+
+    def __init__(self, game: Game = Game()):
+        super().__init__(game, table=self.__class__.table)
+
+
+class MeanSpacedCounterGameEnvironment7(MeanSpacedCounterGameEnvironment):
+    """
+    encode a value using the number of bits in the reservoir set.
+    """
+    table = table_5_7_2s_0_5s
+    name = "MeanSpacedCounter" + "_" + table.name
+
+    def __init__(self, game: Game = Game()):
+        super().__init__(game, table=self.__class__.table)
+
+
+class SampledDenseCounterGameEnvironment1(SampledDenseCounterGameEnvironment):
+    """
+    encode a value using the number of bits in the reservoir set.
+    """
+    table = table_5_1_0_2s
+    name = "SampledDenseCounter" + "_" + table.name
+
+    def __init__(self, game: Game = Game()):
+        super().__init__(game, table=self.__class__.table)
+
+
+class MeanDenseCounterGameEnvironment1(MeanDenseCounterGameEnvironment):
+    """
+    encode a value using the number of bits in the reservoir set.
+    """
+    table = table_5_1_0_2s
+    name = "MeanDenseCounter" + "_" + table.name
+
+    def __init__(self, game: Game = Game()):
+        super().__init__(game, table=self.__class__.table)

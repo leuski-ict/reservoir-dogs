@@ -1,7 +1,8 @@
 from Game import Game
 from Board import Board
 from environments.GameEnvironment import GameEnvironment
-from ConductanceTable import ConductanceTable, original_table
+from environments.reservoir.ConductanceTable import \
+    ConductanceTable, original_table
 
 
 class ReservoirGameEnvironment(GameEnvironment):
